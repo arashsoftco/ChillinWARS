@@ -57,9 +57,9 @@ def decide(width, height, my_score, other_score,
 
 ### everyBody Fuck PACMAN:
         
-        for ID in range(0,4):
-            
-            TEMP=find_pacman_path_to_xy(ghosts[ID], pacman.x, pacman.y,0,ghosts, board, width, height)[1]
+        for ID in range(0,len(ghosts)):
+            print("as ",ID)
+            TEMP=find_pacman_path_to_xy(ghosts[ID], pacman.x, pacman.y,1,ghosts, board, width, height)[1]
         
             Ysta=TEMP[0]-ghosts[ID].y;
             Xsta=TEMP[1]-ghosts[ID].x;

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # python imports
 import random
 
@@ -31,7 +29,7 @@ def initialize(width, height, my_score, other_score,
 
 
 
-def is_there_any_ghosts(x, y, board, width, height, ghosts):
+def is_there_any_ghost(x, y, board, width, height, ghosts):
     st=0
     for ghost in ghosts:
         if(ghosts[ghost.id].x== x and ghosts[ghost.id].y== y):
@@ -51,7 +49,8 @@ def decide(width, height, my_score, other_score,
 
     if my_side == 'Pacman':
 
-        TEMP=get_paths_for(pacman.x, pacman.y, 1, 1,1,ghosts, board, width, height)[0][1]
+        TEMP=find_pacman_path_to_xy(pacman, 1, 1,1,ghosts, board, width, height)[1]
+        
         Ysta=TEMP[0]-pacman.y;
         Xsta=TEMP[1]-pacman.x;
         
@@ -72,71 +71,67 @@ def decide(width, height, my_score, other_score,
     elif my_side == 'Ghost':
         for ghost in ghosts:
             change_ghost_direction(ghost.id,DIR_DOWN)
-
-
-def get_paths_for(x1, y1, x2, y2, ghostscheck, ghosts, board, width, height):
-    result = []
-    Threat = [[[y1,x1]]]
-    slen = width * height
-    while(len(Threat) > 0):
-        newThreat = []
-        index = 0
-        while(index < len(Threat)):
             
-            job = Threat[index]
-            x = job[-1][1]
-            y = job[-1][0]
+
+def find_pacman_path_to_xy(pacman, x2, y2, ghostscheck, ghosts, board, width, height):
+    paths = [[[pacman.y, pacman.x]]]
+    total_paths = len(paths)
+    used = []
+    while(total_paths > 0):
+        newpaths = []
+        index = 0
+        while(index < total_paths):         
+            path = paths[index]
+            x = path[-1][1]
+            y = path[-1][0]
             if(x == x2 and y == y2):
-                if(len(job) <= slen):
-                    slen = len(job)
-                    result.append(job)
-                else:
-                    return result
+                return path
                 
             else:
-
-                if(x - 1 >= 0):
-                    if(board[y][x - 1] != CELL_WALL and not [y, x - 1] in job):
-                        if(ghostscheck):
-                            if(not is_there_any_ghosts(x - 1, y, board, width, height, ghosts)):
-                                newThreat.append(job + [[y, x - 1]])
-                        else:    
-                            newThreat.append(job + [[y, x - 1]])
-                       
-
                 if(x + 1 < width):
-                    if(board[y][x + 1] != CELL_WALL and not [y, x + 1] in job):
+                    if(board[y][x + 1] != CELL_WALL and not [y, x + 1] in (path + used)):
                         if(ghostscheck):
-                            if(not is_there_any_ghosts(x + 1, y, board, width, height, ghosts)):
-                                newThreat.append(job + [[y, x + 1]])
-                        else:    
-                            newThreat.append(job + [[y, x + 1]])
-
-
+                            if(not is_there_any_ghost(x + 1, y, board, width, height, ghosts)):
+                                newpaths.append(path + [[y, x + 1]])
+                                used.append([y, x + 1])
+                        else:
+                            newpaths.append(path + [[y, x + 1]])
+                            used.append([y, x + 1])
                             
-                if(y - 1 >= 0):
-                    if(board[y - 1][x] != CELL_WALL and not [y - 1,x] in job):
-                        if(ghostscheck):
-                            if(not is_there_any_ghosts(x, y - 1, board, width, height, ghosts)):
-                                newThreat.append(job + [[y - 1, x]])  
-                        else:    
-                            newThreat.append(job + [[y - 1, x]])  
-
-
-                        
                 if(y + 1 < height):                    
-                    if(board[y + 1][x] != CELL_WALL and not [y + 1, x] in  job):
+                    if(board[y + 1][x] != CELL_WALL and not [y + 1, x] in (path + used)):
                         if(ghostscheck):
-                            if(not is_there_any_ghosts(x, y + 1, board, width, height, ghosts)):
-                                newThreat.append(job + [[y + 1, x]])
+                            if(not is_there_any_ghost(x, y + 1, board, width, height, ghosts)):
+                                newpaths.append(path + [[y + 1, x]])
+                                used.append([y + 1, x])
                         else:    
-                            newThreat.append(job + [[y + 1, x]])
-                                               
-
-
-            index += 1
-        Threat = newThreat[:]
+                            newpaths.append(path + [[y + 1, x]])
+                            used.append([y + 1, x])                  
+                if(x - 1 >= 0):
+                    if(board[y][x - 1] != CELL_WALL and not [y, x - 1] in (path + used)):
+                        if(ghostscheck):
+                            if(not is_there_any_ghost(x - 1, y, board, width, height, ghosts)):
+                                newpaths.append(path + [[y, x - 1]])
+                                used.append([y, x - 1])
+                        else:    
+                            newpaths.append(path + [[y, x - 1]])
+                            used.append([y, x - 1])
+                        
+                if(y - 1 >= 0):
+                    if(board[y - 1][x] != CELL_WALL and not [y - 1,x] in (path + used)):
+                        if(ghostscheck):
+                            if(not is_there_any_ghost(x, y - 1, board, width, height, ghosts)):
+                                newpaths.append(path + [[y - 1, x]])
+                                used.append([y - 1, x])
+                        else:    
+                            newpaths.append(path + [[y - 1, x]])  
+                            used.append([y - 1, x])  
+            index += 1    
+        paths = newpaths[:]
         
+        total_paths = len(paths)
+    return []
+
 
 
 def change_pacman_direction(dir):

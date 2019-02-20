@@ -81,7 +81,7 @@ def decide(width, height, my_score, other_score,
                 
 
             
-            if(Ysta==-1):
+            if(Ysta==-1):##بالا
                 
                 if(ghosts[ID].direction==DIR_DOWN):
                     if(location[ghosts[ID].y][ghosts[ID].x-1]==CELL_WALL):
@@ -97,15 +97,41 @@ def decide(width, height, my_score, other_score,
                     change_ghost_direction(ID,DIR_UP)
                 
 
-            if(Xsta==1):
-                
-                change_ghost_direction(ID,DIR_RIGHT)
+
+
+            if(Xsta==1):  ##RIGHT
+
+                if(ghosts[ID].direction==DIR_LEFT):
+                    
+                    if(location[ghosts[ID].y-1][ghosts[ID].x]==CELL_WALL):
+                        change_ghost_direction(ID,DIR_DIR_UP)
+                        
+                    else:
+                        if(location[ghosts[ID].y+1][ghosts[ID].x]==CELL_WALL):
+                            change_ghost_direction(ID,DIR_DOWN)
+                        else:
+                            change_ghost_direction(ID,DIR_RIGHT) 
+            
+                else:
+                    change_ghost_direction(ID,DIR_RIGHT)
 
                 
             
-            if(Xsta==-1):
+            if(Xsta==-1):  ##LEFT
                 
-                change_ghost_direction(ID,DIR_LEFT)
+                if(ghosts[ID].direction==DIR_RIGHT):
+                    
+                    if(location[ghosts[ID].y-1][ghosts[ID].x]==CELL_WALL):
+                        change_ghost_direction(ID,DIR_DIR_UP)
+                        
+                    else:
+                        if(location[ghosts[ID].y+1][ghosts[ID].x]==CELL_WALL):
+                            change_ghost_direction(ID,DIR_DOWN)
+                        else:
+                            change_ghost_direction(ID,DIR_LEFT) 
+            
+                else:
+                    change_ghost_direction(ID,DIR_LEFT)
 
 
 

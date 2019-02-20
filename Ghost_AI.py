@@ -67,11 +67,11 @@ def decide(width, height, my_score, other_score,
    
             if(Ysta==1):    ##DOWN
                 if(ghosts[ID].direction==DIR_UP):
-                    if(location[ghosts[ID].y][ghosts[ID].x-1]==CELL_WALL):
+                    if(board[ghosts[ID].y][ghosts[ID].x-1]==CELL_WALL):
                         change_ghost_direction(ID,DIR_RIGHT)
                         
                     else:
-                        if(location[ghosts[ID].y][ghosts[ID].x+1]==CELL_WALL):
+                        if(board[ghosts[ID].y][ghosts[ID].x+1]==CELL_WALL):
                             change_ghost_direction(ID,DIR_LEFT)
                         else:
                             change_ghost_direction(ID,DIR_DOWN) 
@@ -84,11 +84,11 @@ def decide(width, height, my_score, other_score,
             if(Ysta==-1):##بالا
                 
                 if(ghosts[ID].direction==DIR_DOWN):
-                    if(location[ghosts[ID].y][ghosts[ID].x-1]==CELL_WALL):
+                    if(board[ghosts[ID].y][ghosts[ID].x-1]==CELL_WALL):
                         change_ghost_direction(ID,DIR_RIGHT)
                         
                     else:
-                        if(location[ghosts[ID].y][ghosts[ID].x+1]==CELL_WALL):
+                        if(board[ghosts[ID].y][ghosts[ID].x+1]==CELL_WALL):
                             change_ghost_direction(ID,DIR_LEFT)
                         else:
                             change_ghost_direction(ID,DIR_UP) 
@@ -103,11 +103,11 @@ def decide(width, height, my_score, other_score,
 
                 if(ghosts[ID].direction==DIR_LEFT):
                     
-                    if(location[ghosts[ID].y-1][ghosts[ID].x]==CELL_WALL):
+                    if(board[ghosts[ID].y-1][ghosts[ID].x]==CELL_WALL):
                         change_ghost_direction(ID,DIR_DIR_UP)
                         
                     else:
-                        if(location[ghosts[ID].y+1][ghosts[ID].x]==CELL_WALL):
+                        if(board[ghosts[ID].y+1][ghosts[ID].x]==CELL_WALL):
                             change_ghost_direction(ID,DIR_DOWN)
                         else:
                             change_ghost_direction(ID,DIR_RIGHT) 
@@ -121,11 +121,11 @@ def decide(width, height, my_score, other_score,
                 
                 if(ghosts[ID].direction==DIR_RIGHT):
                     
-                    if(location[ghosts[ID].y-1][ghosts[ID].x]==CELL_WALL):
+                    if(board[ghosts[ID].y-1][ghosts[ID].x]==CELL_WALL):
                         change_ghost_direction(ID,DIR_DIR_UP)
                         
                     else:
-                        if(location[ghosts[ID].y+1][ghosts[ID].x]==CELL_WALL):
+                        if(board[ghosts[ID].y+1][ghosts[ID].x]==CELL_WALL):
                             change_ghost_direction(ID,DIR_DOWN)
                         else:
                             change_ghost_direction(ID,DIR_LEFT) 

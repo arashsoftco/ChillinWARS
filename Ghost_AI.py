@@ -42,7 +42,7 @@ def is_there_any_ghost(x, y, board, width, height, ghosts):
     else : return 0
 
 
-def gmove(ID,DIR,ghosts,board):
+def GDirChange(ID,DIR,ghosts,board):
 ######################## MOVE DOWN
     if DIR== 'd':
         
@@ -164,26 +164,20 @@ def decide(width, height, my_score, other_score,
         
             Ysta=TEMP[0]-ghosts[ID].y;
             Xsta=TEMP[1]-ghosts[ID].x;
-        
-   
             if(Ysta==1):    ##DOWN
 
-                gmove(ID,'d',ghosts,board)
+                GDirChange(ID,'d',ghosts,board)
 
-            
             if(Ysta==-1):##بالا
                 
-                gmove(ID,'u',ghosts,board)
-                
-
-
+                GDirChange(ID,'u',ghosts,board)
 
             if(Xsta==1):  ##RIGHT
-                 gmove(ID,'r',ghosts,board)
+                 GDirChange(ID,'r',ghosts,board)
 
             if(Xsta==-1):  ##LEFT
                 
-                 gmove(ID,'l',ghosts,board)
+                 GDirChange(ID,'l',ghosts,board)
 
             
             

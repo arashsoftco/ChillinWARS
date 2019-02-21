@@ -67,7 +67,7 @@ def decide(width, height, my_score, other_score,
         if(Xsta==1):  ##RIGHT
             GDirChange(ID,'r')
         if(Xsta==-1):  ##LEFT  
-            GDirChange(ID,'l')
+            GDirChange(ID,'l') #
     
 
 

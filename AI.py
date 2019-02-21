@@ -32,7 +32,9 @@ def initialize(width, height, my_score, other_score,
 def decide(width, height, my_score, other_score,
            board, pacman, ghosts, constants,
            my_side, other_side, current_cycle, cycle_duration):
-
+    
+    def GDirChange(ID,dir):
+        GhostDirChangingGLOBAL(ID,dir,ghosts,board)
     def IsGhost(X,Y):
         is_there_any_ghost(X, Y, board, width, height, ghosts)
         
@@ -58,13 +60,13 @@ def decide(width, height, my_score, other_score,
         Ysta=PATH[0]-ghosts[ID].y;
         Xsta=PATH[1]-ghosts[ID].x;
         if(Ysta==1):    ##DOWN
-            GDirChange(ID,'d',ghosts,board)
+            GDirChange(ID,'d')
         if(Ysta==-1):##بالا   
-            GDirChange(ID,'u',ghosts,board)
+            GDirChange(ID,'u')
         if(Xsta==1):  ##RIGHT
-            GDirChange(ID,'r',ghosts,board)
+            GDirChange(ID,'r')
         if(Xsta==-1):  ##LEFT  
-            GDirChange(ID,'l',ghosts,board)
+            GDirChange(ID,'l')
     
 
 
@@ -97,7 +99,7 @@ def decide(width, height, my_score, other_score,
 
 
 
-def GDirChange(ID,DIR,ghosts,board):
+def GhostDirChangingGLOBAL(ID,DIR,ghosts,board):
 ######################## MOVE DOWN
     if DIR== 'd':
         

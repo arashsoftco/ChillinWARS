@@ -209,7 +209,7 @@ def GhostDirChangingGLOBAL(ID,DIR,ghosts,board):
                 
     
 
-def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pacman):
+def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pacman): 
     ### in pacman path finding status is nor Auto
 
     ## but in Ghost mode you have to put it 

@@ -64,5 +64,4 @@ FrontEnd Functions:
     
     ## FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height):
     
-    
     *GhostDirChangingGLOBAL 

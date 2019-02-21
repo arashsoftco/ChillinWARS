@@ -43,7 +43,7 @@ def decide(width, height, my_score, other_score,
         is_there_pacman(X, Y, board, width, height, ghosts)
         
     def PMove(X,Y,Gcheck):
-        TEMP=FindPATH(pacman, X, Y,Gcheck,ghosts, board, width, height,'nor')[1]
+        TEMP=FindPATH(pacman, X, Y,Gcheck,ghosts, board, width, height,'nor',pacman)[1]
         Ysta=TEMP[0]-pacman.y;
         Xsta=TEMP[1]-pacman.x;
         if(Ysta==1):
@@ -60,7 +60,7 @@ def decide(width, height, my_score, other_score,
             
     def GMove(ID,X,Y,Gcheck,status):
         
-        PATH=FindPATH(ghosts[ID], X, Y,Gcheck,ghosts, board, width, height,status)[1]
+        PATH=FindPATH(ghosts[ID], X, Y,Gcheck,ghosts, board, width, height,status,pacman)[1]
         Ysta=PATH[0]-ghosts[ID].y;
         Xsta=PATH[1]-ghosts[ID].x;
         if(Ysta==1):    ##DOWN
@@ -209,7 +209,7 @@ def GhostDirChangingGLOBAL(ID,DIR,ghosts,board):
                 
     
 
-def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status):
+def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pacman):
     ### in pacman path finding status is nor Auto
 
     ## but in Ghost mode you have to put it 

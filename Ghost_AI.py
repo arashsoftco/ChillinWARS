@@ -31,6 +31,31 @@ def initialize(width, height, my_score, other_score,
 
 
 
+def decide(width, height, my_score, other_score,
+           board, pacman, ghosts, constants,
+           my_side, other_side, current_cycle, cycle_duration):
+
+##########################################
+    if my_side == 'Pacman':
+        print("ds")
+
+############################################################################################
+    elif my_side == 'Ghost':
+
+
+
+### everyBody Fuck PACMAN:
+        
+        for ID in range(0,4):
+            GMove(ID,pacman.x,pacman.y,1,ghosts,board, width, height)
+            
+        
+
+
+
+
+
+
 def is_there_any_ghost(x, y, board, width, height, ghosts):
     st=0
     for ghost in ghosts:
@@ -141,46 +166,28 @@ def GDirChange(ID,DIR,ghosts,board):
 
 
                 
+def GMove(ID,X,Y,GCHECK,ghosts,board, width, height):
+    
+    PATH=find_pacman_path_to_xy(ghosts[ID], X, Y,GCHECK,ghosts, board, width, height)[1]
+    Ysta=PATH[0]-ghosts[ID].y;
+    Xsta=PATH[1]-ghosts[ID].x;
+    if(Ysta==1):    ##DOWN
+
+        GDirChange(ID,'d',ghosts,board)
+
+    if(Ysta==-1):##بالا
                 
+        GDirChange(ID,'u',ghosts,board)
 
-def decide(width, height, my_score, other_score,
-           board, pacman, ghosts, constants,
-           my_side, other_side, current_cycle, cycle_duration):
+    if(Xsta==1):  ##RIGHT
 
-##########################################
-    if my_side == 'Pacman':
-        print("ds")
+        GDirChange(ID,'r',ghosts,board)
 
-############################################################################################
-    elif my_side == 'Ghost':
-
-
-
-### everyBody Fuck PACMAN:
+    if(Xsta==-1):  ##LEFT
+                
+        GDirChange(ID,'l',ghosts,board)
         
-        for ID in range(0,4):
-            print("as ",ID)
-            TEMP=find_pacman_path_to_xy(ghosts[ID], pacman.x, pacman.y,1,ghosts, board, width, height)[1]
-        
-            Ysta=TEMP[0]-ghosts[ID].y;
-            Xsta=TEMP[1]-ghosts[ID].x;
-            if(Ysta==1):    ##DOWN
 
-                GDirChange(ID,'d',ghosts,board)
-
-            if(Ysta==-1):##بالا
-                
-                GDirChange(ID,'u',ghosts,board)
-
-            if(Xsta==1):  ##RIGHT
-                 GDirChange(ID,'r',ghosts,board)
-
-            if(Xsta==-1):  ##LEFT
-                
-                 GDirChange(ID,'l',ghosts,board)
-
-            
-            
 
 def find_pacman_path_to_xy(pacman, x2, y2, ghostscheck, ghosts, board, width, height):
     paths = [[[pacman.y, pacman.x]]]

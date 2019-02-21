@@ -44,35 +44,48 @@ def is_there_any_ghost(x, y, board, width, height, ghosts):
 
 def gmove(ID,DIR,ghosts,board):
 ######################## MOVE DOWN
-    if DIR== down:
+    if DIR== 'd':
         
         if(ghosts[ID].direction==DIR_UP):
-            if(board[ghosts[ID].y][ghosts[ID].x-1]==CELL_WALL):
+
+            if(board[ghosts[ID].y][ghosts[ID].x-1] != CELL_WALL and board[ghosts[ID].y][ghosts[ID].x+1] != CELL_WALL):  ## CAN GO right OR left
+                change_ghost_direction(ID,random.choice([DIR_LEFT,DIR_RIGHT]))
+                        
+            if(board[ghosts[ID].y][ghosts[ID].x-1] == CELL_WALL and board[ghosts[ID].y][ghosts[ID].x+1] != CELL_WALL):  ## CAN GO RIGHT 
                 change_ghost_direction(ID,DIR_RIGHT)
                         
-            else:
-                if(board[ghosts[ID].y][ghosts[ID].x+1]==CELL_WALL):
-                    change_ghost_direction(ID,DIR_LEFT)
-                else:
-                    change_ghost_direction(ID,DIR_DOWN) 
+            if(board[ghosts[ID].y][ghosts[ID].x-1] != CELL_WALL and board[ghosts[ID].y][ghosts[ID].x+1] == CELL_WALL):  ## CAN GO LEFT 
+                change_ghost_direction(ID,DIR_LEFT)
 
+            if(board[ghosts[ID].y][ghosts[ID].x-1] == CELL_WALL and board[ghosts[ID].y][ghosts[ID].x+1] == CELL_WALL):  ## Nothing To do
+                print("Nothing To do")
+
+            if(board[ghosts[ID].y-1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y][ghosts[ID].x-1] == CELL_WALL ):
+                change_ghost_direction(ID,DIR_DOWN)
         else:
-            change_ghost_direction(ID,DIR_DOWN)
+                change_ghost_direction(ID,DIR_DOWN)
+                
 
 ########################    MOVE UP
 
-    if DIR== up:
+    if DIR== 'u':
     
         if(ghosts[ID].direction==DIR_DOWN):
-            if(board[ghosts[ID].y][ghosts[ID].x-1]==CELL_WALL):
+
+            if(board[ghosts[ID].y][ghosts[ID].x-1] != CELL_WALL and board[ghosts[ID].y][ghosts[ID].x+1] != CELL_WALL):  ## CAN GO right OR left
+                change_ghost_direction(ID,random.choice([DIR_LEFT,DIR_RIGHT]))
+                        
+            if(board[ghosts[ID].y][ghosts[ID].x-1] == CELL_WALL and board[ghosts[ID].y][ghosts[ID].x+1] != CELL_WALL):  ## CAN GO RIGHT 
                 change_ghost_direction(ID,DIR_RIGHT)
                         
-            else:
-                if(board[ghosts[ID].y][ghosts[ID].x+1]==CELL_WALL):
-                    change_ghost_direction(ID,DIR_LEFT)
-                else:
-                    change_ghost_direction(ID,DIR_UP) 
+            if(board[ghosts[ID].y][ghosts[ID].x-1] != CELL_WALL and board[ghosts[ID].y][ghosts[ID].x+1] == CELL_WALL):  ## CAN GO LEFT 
+                change_ghost_direction(ID,DIR_LEFT)
 
+            if(board[ghosts[ID].y][ghosts[ID].x-1] == CELL_WALL and board[ghosts[ID].y][ghosts[ID].x+1] == CELL_WALL):  ## Nothing To do
+                print("Nothing To do")
+
+            if(board[ghosts[ID].y-1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y][ghosts[ID].x-1] == CELL_WALL ):
+                change_ghost_direction(ID,DIR_UP)
         else:
                 change_ghost_direction(ID,DIR_UP)
 
@@ -80,7 +93,7 @@ def gmove(ID,DIR,ghosts,board):
 
 #######################     MOVE RIGHT
 
-    if DIR==right:
+    if DIR=='r':
         
     
         if(ghosts[ID].direction==DIR_LEFT):
@@ -103,7 +116,7 @@ def gmove(ID,DIR,ghosts,board):
                 change_ghost_direction(ID,DIR_RIGHT)
 
 #######################     MOVE LEFT     
-    if DIR==left:
+    if DIR=='l':
         
     
         if(ghosts[ID].direction==DIR_RIGHT):
@@ -155,22 +168,22 @@ def decide(width, height, my_score, other_score,
    
             if(Ysta==1):    ##DOWN
 
-                gmove(ID,down,ghosts,board)
+                gmove(ID,'d',ghosts,board)
 
             
             if(Ysta==-1):##بالا
                 
-                gmove(ID,up,ghosts,board)
+                gmove(ID,'u',ghosts,board)
                 
 
 
 
             if(Xsta==1):  ##RIGHT
-                 gmove(ID,right,ghosts,board)
+                 gmove(ID,'r',ghosts,board)
 
             if(Xsta==-1):  ##LEFT
                 
-                 gmove(ID,left,ghosts,board)
+                 gmove(ID,'l',ghosts,board)
 
             
             

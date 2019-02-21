@@ -29,11 +29,11 @@ $$$  Main File is AI.py
 
 FrontEnd Functions:
 
-  *Gmove --> ID , X , Y , GhostCheck , STATE ['nor' , 'em' ]
+  *Gmove --> ID , X , Y , GhostCheck , status ['nor' , 'em' ]
   
   
      ## have PathFind inside
-     ## if pacman is a giant we are in emergency mode running in the fasted way %% STATE ='em'
+     ## if pacman is a giant we are in emergency mode running at the fasted way   %% status ='em'
      ## have GDirChange inside (Ghost Changing Dir is limited by this Function we will find solution)
      
     
@@ -41,7 +41,7 @@ FrontEnd Functions:
   
   
      ## have PathFind inside
-     ## does not need state mode !!!!
+     ## does not need status mode !!!!
      
     
   *IsGhost --> X,Y
@@ -62,6 +62,7 @@ FrontEnd Functions:
  
     *FindPath
     
-    ## FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height):
+    ## FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,state['nor' , 'em']):
+    %% status for pacman auto is normal but just in Ghost Path need to be put
     
     *GhostDirChangingGLOBAL 

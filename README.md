@@ -24,8 +24,10 @@ AIChallenge CUP
         
 https://chillinwars.ir
 
+$$$  Main File is AI.py
 
-Functions:
+
+FrontEnd Functions:
 
   *Gmove --> ID , X , Y , GhostCheck
   
@@ -55,3 +57,12 @@ Functions:
      ## AutoConnecting to Global Function called GhostDirChangingGLOBAL
   
  
+ 
+ BackEnd Functions:
+ 
+    *FindPath
+    
+    ## FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height):
+    
+    
+    *GhostDirChangingGLOBAL 

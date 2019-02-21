@@ -84,9 +84,13 @@ def decide(width, height, my_score, other_score,
 
 ###### **** GHOST ****
     elif my_side == 'Ghost':
-
-        for ID in range(0,len(ghosts)):
-            GMove(ID,pacman.x,pacman.y,1,'nor')
+        if pacman.giant_form_remaining_time:
+            for ID in range(0,len(ghosts)):   
+                GMove(ID,46,21,1,'em')
+## 46 19
+        else:   
+            for ID in range(0,len(ghosts)):
+                GMove(ID,pacman.x,pacman.y,1,'nor')
  
 
             
@@ -287,7 +291,7 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status):
                     if(x + 1 < width):
                         if(board[y][x + 1] != CELL_WALL and not [y, x + 1] in (path + used)):
                             if(ghostscheck):
-                                if(not is_there_pacman(x + 1, y, board, width, height, ghosts)):
+                                if(not is_there_pacman(x + 1, y, board, width, height, pacman)):
                                     newpaths.append(path + [[y, x + 1]])
                                     used.append([y, x + 1])
                             else:
@@ -297,7 +301,7 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status):
                     if(y + 1 < height):                    
                         if(board[y + 1][x] != CELL_WALL and not [y + 1, x] in (path + used)):
                             if(ghostscheck):
-                                if(not is_there_pacman(x, y + 1, board, width, height, ghosts)):
+                                if(not is_there_pacman(x, y + 1, board, width, height, pacman)):
                                     newpaths.append(path + [[y + 1, x]])
                                     used.append([y + 1, x])
                             else:    
@@ -306,7 +310,7 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status):
                     if(x - 1 >= 0):
                         if(board[y][x - 1] != CELL_WALL and not [y, x - 1] in (path + used)):
                             if(ghostscheck):
-                                if(not is_there_pacman(x - 1, y, board, width, height, ghosts)):
+                                if(not is_there_pacman(x - 1, y, board, width, height, pacman)):
                                     newpaths.append(path + [[y, x - 1]])
                                     used.append([y, x - 1])
                             else:    
@@ -316,7 +320,7 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status):
                     if(y - 1 >= 0):
                         if(board[y - 1][x] != CELL_WALL and not [y - 1,x] in (path + used)):
                             if(ghostscheck):
-                                if(not is_there_pacman(x, y - 1, board, width, height, ghosts)):
+                                if(not is_there_pacman(x, y - 1, board, width, height, pacman)):
                                     newpaths.append(path + [[y - 1, x]])
                                     used.append([y - 1, x])
                             else:    
@@ -337,7 +341,7 @@ def is_there_any_ghost(x, y, board, width, height, ghosts):
     if st>=1 : return 1
     else : return 0
 
-def is_there_pacman(x,y,board, width, height, ghosts):
+def is_there_pacman(x,y,board, width, height, pacman):
     if(pacman.x==x and pacman.y==y):
         return 1
     else:

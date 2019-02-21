@@ -37,7 +37,7 @@ def decide(width, height, my_score, other_score,
         is_there_any_ghost(X, Y, board, width, height, ghosts)
         
     def PMove(X,Y,GCHECK):
-        TEMP=FindPATH(pacman, X, Y,Gcheck,ghosts, board, width, height)[1]
+        TEMP=FindPATH(pacman, X, Y,GCHECK,ghosts, board, width, height)[1]
         Ysta=TEMP[0]-pacman.y;
         Xsta=TEMP[1]-pacman.x;
         if(Ysta==1):

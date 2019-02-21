@@ -27,7 +27,7 @@ https://chillinwars.ir
 
 Functions:
 
-  Gmove --> ID , X , Y , GhostCheck
+  *Gmove --> ID , X , Y , GhostCheck
   
   
      ## have PathFind inside
@@ -35,23 +35,23 @@ Functions:
      ## have GDirChange inside (Ghost Changing Dir is limited by this Function we will find solution)
      
     
-  Pmove --> X , Y , GhostCheck
+  *Pmove --> X , Y , GhostCheck
   
   
      ## have PathFind inside
      
      
     
-  IsGhost --> X,Y
+  *IsGhost --> X,Y
   
   
-     ## Related to another Function
+     ## AutoConnecting to another Function called is_there_any_ghost
      
      
   
-  GDirChange --> ID , dir
+  *GDirChange --> ID , dir
   
   
-     ## Realated to Global Function GhostDirChangingGLOBAL
+     ## AutoConnecting to Global Function called GhostDirChangingGLOBAL
   
  

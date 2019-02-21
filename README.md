@@ -29,11 +29,11 @@ $$$  Main File is AI.py
 
 FrontEnd Functions:
 
-  *Gmove --> ID , X , Y , GhostCheck
+  *Gmove --> ID , X , Y , GhostCheck , STATE ['nor' , 'em' ]
   
   
      ## have PathFind inside
-     
+     ## if pacman is a giant we are in emergency mode running in the fasted way %% STATE ='em'
      ## have GDirChange inside (Ghost Changing Dir is limited by this Function we will find solution)
      
     
@@ -41,7 +41,7 @@ FrontEnd Functions:
   
   
      ## have PathFind inside
-     
+     ## does not need state mode !!!!
      
     
   *IsGhost --> X,Y

@@ -20,20 +20,85 @@ DIR_DOWN = EDirection.Down
 DIR_LEFT = EDirection.Left
 
 
+EscapeX=0
+EscapeY=0
 
+superfood =[[0,0]]
 
 def initialize(width, height, my_score, other_score,
                board, pacman, ghosts, constants,
                my_side, other_side, current_cycle, cycle_duration):
+
+    global superfood
+    
+    global EscapeX
+    global EscapeY
+    EscapeX=pacman.x
+    EscapeY=pacman.y
+
+
+    superfood.pop(0)
+    
+    for x in range (1,width):
+        for y in range(1,height):
+            if(board[y][x]==CELL_SUPERFOOD):
+                superfood.append([x,y])
+
+  
+    print(superfood)
     
     pass
 
+min=9999999999999
 
 def decide(width, height, my_score, other_score,
            board, pacman, ghosts, constants,
            my_side, other_side, current_cycle, cycle_duration):
 
-    print()
+    
+    def PAttack():
+        TargetID=0
+        global min
+        for id in range(0,len(ghosts)):
+            temp=len(FindPATH(pacman, ghosts[id].x, ghosts[id].y, 0, ghosts, board, width, height,'nor',pacman))
+            if temp < min:
+                min=temp
+                TargetID=id
+                
+        PMove(ghosts[TargetID].x,ghosts[TargetID].y,0)
+
+        
+    def Escape():  
+        global EscapeX
+        global EscapeY  
+        if (pacman.direction==DIR_RIGHT):
+            for x in range(3,40):
+                if(board[pacman.y][pacman.x-x] != CELL_WALL):
+                    EscapeX=pacman.x-x
+                    EscapeY=pacman.y
+                    break
+        if (pacman.direction==DIR_LEFT):
+            for x in range(3,40):
+
+                if(board[pacman.y][pacman.x+x] != CELL_WALL):
+                    EscapeX=pacman.x+x
+                    EscapeY=pacman.y
+                    break
+        if (pacman.direction==DIR_UP):
+            for Y in range(3,40):
+              
+                if(board[pacman.y+Y][pacman.x] != CELL_WALL):                 
+                    EscapeX=pacman.x
+                    EscapeY=pacman.y+Y
+                    break
+        if (pacman.direction==DIR_DOWN):
+            for Y in range(3,40):
+                if(board[pacman.y-Y][pacman.x] != CELL_WALL):
+                    EscapeX=pacman.x
+                    EscapeY=pacman.y-Y
+                    break
+    print( EscapeX ,  EscapeY)
+             
     def GDirChange(ID,dir):
         GhostDirChangingGLOBAL(ID,dir,ghosts,board)
     def IsGhost(X,Y):
@@ -77,36 +142,41 @@ def decide(width, height, my_score, other_score,
 ###### **** PACMAN ****
             
     if my_side == 'Pacman':
-        PMove(1,1,1)
 
+        global superfood
+        if pacman.giant_form_remaining_time<=3:
+            if (len(superfood)): 
+                sid=-1
+                min=999999999
+                print('A : ' , superfood)
+                for index in range (0,len (superfood)):
 
+                    temp=len(FindPATH(pacman, superfood[index][0], superfood[index][1], 1, ghosts, board, width, height,'nor',pacman))      
+                    if (temp <min):
+                        min = temp
+                        sid=index     
+                Temp=superfood[sid]
+                if(pacman.x==Temp[0] and pacman.y==Temp[1]):
+                    superfood.pop(sid)
+                PMove(Temp[0],Temp[1],1)
+        else:
+            PAttack()
 
 
 ###### **** GHOST ****
     elif my_side == 'Ghost':
-        if pacman.giant_form_remaining_time:
-            for ID in range(0,len(ghosts)):   
-                GMove(ID,46,21,1,'em')
-## 46 19
-        else:   
+     
+        if pacman.giant_form_remaining_time<=3:
             for ID in range(0,len(ghosts)):
-                GMove(ID,pacman.x,pacman.y,1,'nor')
+                GMove(ID,pacman.x,pacman.y,1,'nor')         
+
+## 46 19
+        else:
+            for ID in range(0,len(ghosts)):
+                Escape()
+                GMove(ID,EscapeX,EscapeY,0,'em')
+                
  
-
-            
-            
-
-
-
-
-
-
-
-
-
-
-
-
 
 def GhostDirChangingGLOBAL(ID,DIR,ghosts,board):
 ######################## MOVE DOWN
@@ -166,10 +236,10 @@ def GhostDirChangingGLOBAL(ID,DIR,ghosts,board):
             if(board[ghosts[ID].y-1][ghosts[ID].x] != CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] != CELL_WALL):  ## CAN GO UP OR DOWN
                 change_ghost_direction(ID,random.choice([DIR_UP,DIR_DOWN]))
                         
-            if(board[ghosts[ID].y-1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] != CELL_WALL):  ## CAN GO UP 
+            if(board[ghosts[ID].y+1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y-1][ghosts[ID].x] != CELL_WALL):  ## CAN GO UP 
                 change_ghost_direction(ID,DIR_UP)
                         
-            if(board[ghosts[ID].y-1][ghosts[ID].x] != CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] == CELL_WALL):  ## CAN GO DOWN 
+            if(board[ghosts[ID].y+1][ghosts[ID].x] != CELL_WALL and board[ghosts[ID].y-1][ghosts[ID].x] == CELL_WALL):  ## CAN GO DOWN 
                 change_ghost_direction(ID,DIR_UP)
 
             if(board[ghosts[ID].y-1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] == CELL_WALL):  ## Nothing To do
@@ -190,10 +260,10 @@ def GhostDirChangingGLOBAL(ID,DIR,ghosts,board):
             if(board[ghosts[ID].y-1][ghosts[ID].x] != CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] != CELL_WALL):  ## CAN GO UP OR DOWN
                 change_ghost_direction(ID,random.choice([DIR_UP,DIR_DOWN]))
                         
-            if(board[ghosts[ID].y-1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] != CELL_WALL):  ## CAN GO UP 
+            if(board[ghosts[ID].y+1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y-1][ghosts[ID].x] != CELL_WALL):  ## CAN GO UP 
                 change_ghost_direction(ID,DIR_UP)
                         
-            if(board[ghosts[ID].y-1][ghosts[ID].x] != CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] == CELL_WALL):  ## CAN GO DOWN 
+            if(board[ghosts[ID].y+1][ghosts[ID].x] != CELL_WALL and board[ghosts[ID].y-1][ghosts[ID].x] == CELL_WALL):  ## CAN GO DOWN 
                 change_ghost_direction(ID,DIR_UP)
 
             if(board[ghosts[ID].y-1][ghosts[ID].x] == CELL_WALL and board[ghosts[ID].y+1][ghosts[ID].x] == CELL_WALL):  ## Nothing To do
@@ -209,7 +279,7 @@ def GhostDirChangingGLOBAL(ID,DIR,ghosts,board):
                 
     
 
-def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pacman): 
+def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pacman):
     ### in pacman path finding status is nor Auto
 
     ## but in Ghost mode you have to put it 
@@ -273,7 +343,8 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pa
         return []
 
     else:  ## Running From Pacman
-        
+        print("Escape")
+        ghostscheck=1
         paths = [[[OBJECT.y, OBJECT.x]]]
         total_paths = len(paths)
         used = []
@@ -290,7 +361,7 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pa
                 else:
                     if(x + 1 < width):
                         if(board[y][x + 1] != CELL_WALL and not [y, x + 1] in (path + used)):
-                            if(ghostscheck):
+                            if(1):
                                 if(not is_there_pacman(x + 1, y, board, width, height, pacman)):
                                     newpaths.append(path + [[y, x + 1]])
                                     used.append([y, x + 1])
@@ -300,7 +371,7 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pa
                             
                     if(y + 1 < height):                    
                         if(board[y + 1][x] != CELL_WALL and not [y + 1, x] in (path + used)):
-                            if(ghostscheck):
+                            if(1):
                                 if(not is_there_pacman(x, y + 1, board, width, height, pacman)):
                                     newpaths.append(path + [[y + 1, x]])
                                     used.append([y + 1, x])
@@ -309,7 +380,7 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pa
                                 used.append([y + 1, x])                  
                     if(x - 1 >= 0):
                         if(board[y][x - 1] != CELL_WALL and not [y, x - 1] in (path + used)):
-                            if(ghostscheck):
+                            if(1):
                                 if(not is_there_pacman(x - 1, y, board, width, height, pacman)):
                                     newpaths.append(path + [[y, x - 1]])
                                     used.append([y, x - 1])
@@ -319,7 +390,7 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pa
                         
                     if(y - 1 >= 0):
                         if(board[y - 1][x] != CELL_WALL and not [y - 1,x] in (path + used)):
-                            if(ghostscheck):
+                            if(1):
                                 if(not is_there_pacman(x, y - 1, board, width, height, pacman)):
                                     newpaths.append(path + [[y - 1, x]])
                                     used.append([y - 1, x])

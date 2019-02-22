@@ -24,12 +24,16 @@ EscapeX=0
 EscapeY=0
 
 superfood =[[0,0]]
+food=[[0,0]]
+
+makefood=0
 
 def initialize(width, height, my_score, other_score,
                board, pacman, ghosts, constants,
                my_side, other_side, current_cycle, cycle_duration):
 
     global superfood
+    global food
     
     global EscapeX
     global EscapeY
@@ -44,12 +48,14 @@ def initialize(width, height, my_score, other_score,
             if(board[y][x]==CELL_SUPERFOOD):
                 superfood.append([x,y])
 
-  
+
+
+                
     print(superfood)
     
     pass
 
-min=9999999999999
+
 
 def decide(width, height, my_score, other_score,
            board, pacman, ghosts, constants,
@@ -57,14 +63,17 @@ def decide(width, height, my_score, other_score,
 
     
     def PAttack():
+        
         TargetID=0
-        global min
+        
+        min=99999999
+        
         for id in range(0,len(ghosts)):
             temp=len(FindPATH(pacman, ghosts[id].x, ghosts[id].y, 0, ghosts, board, width, height,'nor',pacman))
             if temp < min:
                 min=temp
                 TargetID=id
-                
+    
         PMove(ghosts[TargetID].x,ghosts[TargetID].y,0)
 
         
@@ -111,31 +120,43 @@ def decide(width, height, my_score, other_score,
         TEMP=FindPATH(pacman, X, Y,Gcheck,ghosts, board, width, height,'nor',pacman)[1]
         Ysta=TEMP[0]-pacman.y;
         Xsta=TEMP[1]-pacman.x;
-        if(Ysta==1):
-            change_pacman_direction(DIR_DOWN)
-            
-        if(Ysta==-1):
-            change_pacman_direction(DIR_UP)
 
-        if(Xsta==1):
-            change_pacman_direction(DIR_RIGHT)
+        if(len(TEMP)==0):
             
-        if(Xsta==-1):
-            change_pacman_direction(DIR_LEFT)
+            change_pacman_direction(random.choice([DIR_LEFT,DIR_RIGHT,DIR_UP,DIR_DOWN]))
+
+        else:   
+            if(Ysta==1):
+                change_pacman_direction(DIR_DOWN)
+            
+            if(Ysta==-1):
+                change_pacman_direction(DIR_UP)
+
+            if(Xsta==1):
+                change_pacman_direction(DIR_RIGHT)
+            
+            if(Xsta==-1):
+                change_pacman_direction(DIR_LEFT)
             
     def GMove(ID,X,Y,Gcheck,status):
         
         PATH=FindPATH(ghosts[ID], X, Y,Gcheck,ghosts, board, width, height,status,pacman)[1]
         Ysta=PATH[0]-ghosts[ID].y;
         Xsta=PATH[1]-ghosts[ID].x;
-        if(Ysta==1):    ##DOWN
-            GDirChange(ID,'d')
-        if(Ysta==-1):##بالا   
-            GDirChange(ID,'u')
-        if(Xsta==1):  ##RIGHT
-            GDirChange(ID,'r')
-        if(Xsta==-1):  ##LEFT  
-            GDirChange(ID,'l')
+        
+        if(len(PATH)==0):
+
+            GDirChange(ID,random.choice([DIR_LEFT,DIR_RIGHT,DIR_UP,DIR_DOWN]))
+            
+        else:        
+            if(Ysta==1):    ##DOWN
+                GDirChange(ID,'d')
+            if(Ysta==-1):##بالا   
+                GDirChange(ID,'u')
+            if(Xsta==1):  ##RIGHT
+                GDirChange(ID,'r')
+            if(Xsta==-1):  ##LEFT  
+                GDirChange(ID,'l')
     
 
 
@@ -144,7 +165,11 @@ def decide(width, height, my_score, other_score,
     if my_side == 'Pacman':
 
         global superfood
+        global food
+        global makefood
+        
         if pacman.giant_form_remaining_time<=3:
+            
             if (len(superfood)): 
                 sid=-1
                 min=999999999
@@ -159,6 +184,32 @@ def decide(width, height, my_score, other_score,
                 if(pacman.x==Temp[0] and pacman.y==Temp[1]):
                     superfood.pop(sid)
                 PMove(Temp[0],Temp[1],1)
+
+            else:
+                if(makefood==0):
+                    makefood=1
+                    food.pop()
+                    for x in range (1,width):
+                        for y in range(1,height):
+                            if(board[y][x]==CELL_FOOD):
+                                food.append([x,y])
+                else:
+                    
+                    sid=-1
+                    min=999999999
+                    print('A : ' , food)
+                    for index in range (0,len (food)):
+                        if(board[food[index][1]][food[index][0]]==CELL_FOOD):
+                            temp=len(FindPATH(pacman, food[index][0], food[index][1], 1, ghosts, board, width, height,'nor',pacman))      
+                            if (temp <min):
+                                min = temp
+                                sid=index
+                        
+                    Temp=food[sid]
+                    if(pacman.x==Temp[0] and pacman.y==Temp[1]):
+                        food.pop(sid)
+                    PMove(Temp[0],Temp[1],1)
+                
         else:
             PAttack()
 

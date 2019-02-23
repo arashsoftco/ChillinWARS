@@ -215,7 +215,7 @@ def decide(width, height, my_score, other_score,
 
 
 ###### **** GHOST ****
-    elif my_side == 'Ghost':
+    elif my_side == 'Ghost': 
      
         if pacman.giant_form_remaining_time<=3:
             for ID in range(0,len(ghosts)):

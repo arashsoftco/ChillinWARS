@@ -1,6 +1,6 @@
 # python imports
 import random
-
+import copy
 # project imports
 from ks.commands import ECommandDirection, ChangeGhostDirection, ChangePacmanDirection
 from ks.models import ECell, EDirection
@@ -388,8 +388,7 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pa
                                 newpaths.append(path + [[y - 1, x]])  
                                 used.append([y - 1, x])  
                 index += 1    
-            paths = newpaths[:]
-        
+            paths = copy.deepcopy(newpaths)
             total_paths = len(paths)
         return []
 
@@ -449,8 +448,8 @@ def FindPATH(OBJECT, x2, y2, ghostscheck, ghosts, board, width, height,status,pa
                                 newpaths.append(path + [[y - 1, x]])  
                                 used.append([y - 1, x])  
                 index += 1    
-            paths = newpaths[:]
-        
+     
+            paths = copy.deepcopy(newpaths)
             total_paths = len(paths)
         return []        
 

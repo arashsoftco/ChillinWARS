@@ -22,6 +22,9 @@ DIR_LEFT = EDirection.Left
 
 EscapeX=0
 EscapeY=0
+superfoodTempX=0
+superfoodTempY=0
+superfoodID=0
 
 superfood =[[0,0]]
 food=[[0,0]]
@@ -61,7 +64,10 @@ def decide(width, height, my_score, other_score,
            board, pacman, ghosts, constants,
            my_side, other_side, current_cycle, cycle_duration):
 
-    
+    def go4food():
+        Temp=FoodPathFinder(pacman,1, ghosts, board, width, height,pacman)[1]
+        PMove(Temp[1],Temp[0],1)        
+
     def PAttack():
         
         TargetID=0
@@ -167,67 +173,68 @@ def decide(width, height, my_score, other_score,
         global superfood
         global food
         global makefood
+
+        global superfoodTempX
+        global superfoodTempY
+        global superfoodID
+        minDistanceGhost=99999999
         
-        if pacman.giant_form_remaining_time<=3:
-            
+        if(pacman.x==superfoodTempX and pacman.y==superfoodTempY and len(superfood)):
+            superfood.pop(superfoodID)
+           
+        for  index in range(0,len(ghosts)):
+            temp=len(FindPATH(pacman, ghosts[index].x, ghosts[index].y, 0, ghosts, board, width, height,'nor',pacman))      
+            if (temp <minDistanceGhost):
+                minDistanceGhost=temp
+        
+        if minDistanceGhost<=10 and  pacman.giant_form_remaining_time<3:
+
             if (len(superfood)): 
                 sid=-1
                 min=999999999
-                print('A : ' , superfood)
                 for index in range (0,len (superfood)):
 
                     temp=len(FindPATH(pacman, superfood[index][0], superfood[index][1], 1, ghosts, board, width, height,'nor',pacman))      
                     if (temp <min):
                         min = temp
-                        sid=index     
+                        sid=index  
+
                 Temp=superfood[sid]
-                if(pacman.x==Temp[0] and pacman.y==Temp[1]):
-                    superfood.pop(sid)
-                PMove(Temp[0],Temp[1],1)
+                superfoodTempX=Temp[1]
+                superfoodTempY=Temp[0]
+                superfoodID=sid
+                PMove(Temp[1],Temp[0],1)
 
             else:
-                if(makefood==0):
-                    makefood=1
-                    food.pop()
-                    for x in range (1,width):
-                        for y in range(1,height):
-                            if(board[y][x]==CELL_FOOD):
-                                food.append([x,y])
-                else:
-                    
-                    sid=-1
-                    min=999999999
-                    print('A : ' , food)
-                    for index in range (0,len (food)):
-                        if(board[food[index][1]][food[index][0]]==CELL_FOOD):
-                            temp=len(FindPATH(pacman, food[index][0], food[index][1], 1, ghosts, board, width, height,'nor',pacman))      
-                            if (temp <min):
-                                min = temp
-                                sid=index
-                        
-                    Temp=food[sid]
-                    if(pacman.x==Temp[0] and pacman.y==Temp[1]):
-                        food.pop(sid)
-                    PMove(Temp[0],Temp[1],1)
-                
-        else:
+                PMove(1,1,1)
+
+        if minDistanceGhost>10 and  pacman.giant_form_remaining_time<3:
+            go4food()
+              
+        if pacman.giant_form_remaining_time>=3:
             PAttack()
 
 
 ###### **** GHOST ****
     elif my_side == 'Ghost': 
-     
-        if pacman.giant_form_remaining_time<=3:
-            for ID in range(0,len(ghosts)):
-                GMove(ID,pacman.x,pacman.y,1,'nor')         
-
-## 46 19
-        else:
-            for ID in range(0,len(ghosts)):
-                Escape()
-                GMove(ID,EscapeX,EscapeY,0,'em')
+        Escape()
+   
                 
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def GhostDirChangingGLOBAL(ID,DIR,ghosts,board):
 ######################## MOVE DOWN
@@ -474,3 +481,62 @@ def change_pacman_direction(dir):
 
 def change_ghost_direction(id, dir):
     ai.send_command(ChangeGhostDirection(id=id, direction=dir))
+
+
+
+def FoodPathFinder(OBJECT,ghostscheck, ghosts, board, width, height,pacman):
+
+    paths = [[[OBJECT.y, OBJECT.x]]]
+    total_paths = len(paths)
+    used = []
+    while(total_paths > 0):
+        newpaths = []
+        index = 0
+        while(index < total_paths):         
+            path = paths[index]
+            x = path[-1][1]
+            y = path[-1][0]
+            if(board[y][x]==CELL_FOOD):
+                return path
+
+            else:
+                if(x + 1 < width):
+                    if(board[y][x + 1] != CELL_WALL and not [y, x + 1] in (path + used)):
+                        if(ghostscheck):
+                            if(not is_there_any_ghost(x + 1, y, board, width, height, ghosts)):
+                                newpaths.append(path + [[y, x + 1]])
+                                used.append([y, x + 1])
+                        else:
+                            newpaths.append(path + [[y, x + 1]])
+                            used.append([y, x + 1])                            
+                if(y + 1 < height):                    
+                    if(board[y + 1][x] != CELL_WALL and not [y + 1, x] in (path + used)):
+                        if(ghostscheck):
+                            if(not is_there_any_ghost(x, y + 1, board, width, height, ghosts)):
+                                newpaths.append(path + [[y + 1, x]])
+                                used.append([y + 1, x])
+                        else:    
+                            newpaths.append(path + [[y + 1, x]])
+                            used.append([y + 1, x])                  
+                if(x - 1 >= 0):
+                    if(board[y][x - 1] != CELL_WALL and not [y, x - 1] in (path + used)):
+                        if(ghostscheck):
+                            if(not is_there_any_ghost(x - 1, y, board, width, height, ghosts)):
+                                newpaths.append(path + [[y, x - 1]])
+                                used.append([y, x - 1])
+                        else:    
+                            newpaths.append(path + [[y, x - 1]])
+                            used.append([y, x - 1])                        
+                if(y - 1 >= 0):
+                    if(board[y - 1][x] != CELL_WALL and not [y - 1,x] in (path + used)):
+                        if(ghostscheck):
+                            if(not is_there_any_ghost(x, y - 1, board, width, height, ghosts)):
+                                newpaths.append(path + [[y - 1, x]])
+                                used.append([y - 1, x])
+                        else:    
+                            newpaths.append(path + [[y - 1, x]])  
+                            used.append([y - 1, x])  
+            index += 1    
+        paths = copy.deepcopy(newpaths)
+        total_paths = len(paths)
+    return []
